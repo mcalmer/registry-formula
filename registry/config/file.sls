@@ -13,7 +13,7 @@ include:
 registry-config-file-file-managed:
   file.managed:
     - name: {{ registry.configdir + registry.configfile }}
-    - source: {{ files_switch(['config.yml'],
+    - source: {{ files_switch(['config.yml', 'config.yml.jinja'],
                               lookup='registry-config-file-file-managed'
                  )
               }}

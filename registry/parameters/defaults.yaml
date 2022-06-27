@@ -5,14 +5,16 @@
 ---
 values:
   pkg:
-    name: registry
+    name: docker-distribution-registry
   rootgroup: root
-  config: '/etc/registry'
+  configdir: '/etc/registry/'
+  configfile: 'config.yml'
+  storage:
+    filesystem:
+      rootdirectory: '/var/lib/docker-registry'
+  authentication: false
+  http:
+    addr: :5000
   service:
     name: registry
-  subcomponent:
-    config: '/etc/registry-subcomponent-formula.conf'
-  # Just here for testing
-  added_in_defaults: defaults_value
-  winner: defaults
 ...

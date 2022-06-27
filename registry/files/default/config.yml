@@ -1,0 +1,24 @@
+# -*- coding: utf-8 -*-
+# vim: ft=json
+
+version: 0.1
+{{ registry.log | json }}
+{{ registry.storage | json }}
+
+{{ registry.delete | json }}
+{{ registry.http | json }}
+{%- if registry.authentication %}
+{%- if registry.auth.htpasswd.htpasswdfile %}
+{% set htpasswd = registry.configdir + registry.auth.htpasswd.htpasswdfile %}
+  auth:
+    htpasswd:
+      realm: registry-realm
+      htpasswdfile: {{ htpasswd }}
+{%- else %}
+{{ registry.auth | json }}
+{%- endif %}
+{%- endif %}
+{{ registry.health | json }}
+{{ registry.validation | json }}
+{{ registry.prometheus | json }}
+

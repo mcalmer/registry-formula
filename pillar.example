@@ -5,15 +5,6 @@ registry:
   lookup:
     master: template-master
 
-  # Using bash package and udev service as an example. This allows us to
-  # test the template formula itself. You should set these parameters to
-  # examples that make sense in the contexto of the formula you're writing.
-  pkg:
-    name: bash
-  service:
-    name: systemd-journald
-  config: /etc/template-formula.conf
-
   tofs:
     # The files_switch key serves as a selector for alternative
     # directories under the formula files directory. See TOFS pattern
@@ -21,10 +12,6 @@ registry:
     # Note: Any value not evaluated by `config.get` will be used literally.
     # This can be used to set custom paths, as many levels deep as required.
     files_switch:
-      - any/path/can/be/used/here
-      - id
-      - roles
-      - osfinger
       - os
       - os_family
 
@@ -40,5 +27,35 @@ registry:
     # given for the state
     source_files:
       registry-config-file-file-managed:
-        - 'example_alt.tmpl'
-        - 'example_alt.tmpl.jinja'
+        - 'config.yml'
+        - 'config.yml.jinja'
+
+  log:
+    level: info
+    formatter: text
+    fields:
+      service: registry
+      environment: production
+  storage:
+    cache:
+      blobdescriptor: inmemory 
+    filesystem:
+      rootdirectory: /var/lib/registry
+  delete:
+    enabled: true
+  auth:
+    htpasswd:
+      realm: basic-realm
+      htpasswdfile: htpasswd
+  http:
+    addr: :5000
+    tls:
+      certificate: /path/to/x509/public
+      key: /path/to/x509/private
+      clientcas:
+        - /path/to/ca.pem
+        - /path/to/another/ca.pem
+      minimumtls: tls1.2
+    headers:
+      X-Content-Type-Options: [nosniff]
+

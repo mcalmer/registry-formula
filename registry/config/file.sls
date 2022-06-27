@@ -12,8 +12,8 @@ include:
 
 registry-config-file-file-managed:
   file.managed:
-    - name: {{ registry.config }}
-    - source: {{ files_switch(['example.tmpl'],
+    - name: {{ registry.configdir + registry.configfile }}
+    - source: {{ files_switch(['config.yml'],
                               lookup='registry-config-file-file-managed'
                  )
               }}

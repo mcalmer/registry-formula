@@ -13,6 +13,8 @@
 ---
 values:
   pkg:
-    name: registry-debian
-  config: /etc/registry.d/custom.conf
+    name: docker-registry
+  configdir: '/etc/docker/registry/'
+  service:
+    name: docker-registry
 ...

@@ -2,17 +2,22 @@
 # vim: ft=yaml
 #
 # Set values specific to:
-#   salt['config.get']('os_family') == RedHat.
+#   salt['config.get']('os') == Fedora.
 #
-# You just need to add the key:values for this `os_family` that differ
-# from `defaults.yaml` + `<osarch>.yaml`.
+# You just need to add the key:values for this `os` that differ
+# from `defaults.yaml` + `<osarch>.yaml` + `<os_family>.yaml`.
 #
-# If you do not need to provide defaults via the `os_family` config,
+# If you do not need to provide defaults via the `os` config,
 # you can remove this file or provide at least an empty dict, e.g.
 # values: {}
 ---
 values:
   pkg:
-    name: registry-redhat
-  config: /etc/registry.conf
+    name: docker-distribution
+  configdir: '/etc/docker-distribution/registry/'
+  storage:
+    filesystem:
+      rootdirectory: '/var/lib/registry'
+  service:
+    name: docker-distribution
 ...

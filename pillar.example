@@ -38,7 +38,7 @@ registry:
       environment: production
   storage:
     cache:
-      blobdescriptor: inmemory 
+      blobdescriptor: inmemory
     filesystem:
       rootdirectory: /var/lib/registry
   delete:
@@ -58,4 +58,3 @@ registry:
       minimumtls: tls1.2
     headers:
       X-Content-Type-Options: [nosniff]
-

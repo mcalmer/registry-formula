@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
-# vim: ft=json
-
 version: 0.1
 {{ registry.log | json }}
 {{ registry.storage | json }}
-
 {{ registry.delete | json }}
 {{ registry.http | json }}
 {%- if registry.authentication %}
@@ -21,4 +17,3 @@ version: 0.1
 {{ registry.health | json }}
 {{ registry.validation | json }}
 {{ registry.prometheus | json }}
-

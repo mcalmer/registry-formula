@@ -17,6 +17,7 @@ ignore: |
   .cache/
   .git/
   node_modules/
+  vendor/
   test/**/states/**/*.sls
   .kitchen/
   kitchen.vagrant.yml

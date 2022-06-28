@@ -9,7 +9,7 @@ control 'registry.service.running' do
   # Override by `platform_family`
   service_name =
     case platform_family
-    when 'redhat'
+    when 'redhat', 'fedora'
       'docker-distribution'
     when 'debian'
       'docker-registry'

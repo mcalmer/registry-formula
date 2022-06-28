@@ -2,6 +2,7 @@
 
 # Prepare platform "family"
 platform_family = system.platform[:family]
+platform_codename = system.platform[:codename]
 
 control 'registry.package.install' do
   title 'The required package should be installed'
@@ -9,11 +10,17 @@ control 'registry.package.install' do
   # Override by `platform_finger`
   package_name =
     case platform_family
-    when 'redhat'
+    when 'redhat', 'fedora'
       'docker-distribution'
     when 'debian'
       'docker-registry'
-    else # suse
+    when 'suse'
+      if platform_codename.include?('Tumbleweed')
+        'distribution-registry'
+      else
+        'docker-distribution-registry'
+      end
+    else # default
       'docker-distribution-registry'
     end
 

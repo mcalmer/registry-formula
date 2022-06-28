@@ -10,7 +10,7 @@ control 'registry.config.file' do
     case platform_family
     when 'suse'
       '/etc/registry/config.yml'
-    when 'redhat'
+    when 'redhat', 'fedora'
       '/etc/docker-distribution/registry/config.yml'
     when 'debian'
       '/etc/docker/registry/config.yml'

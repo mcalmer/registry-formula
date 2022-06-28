@@ -41,8 +41,8 @@ registry:
       blobdescriptor: inmemory
     filesystem:
       rootdirectory: /var/lib/registry
-  delete:
-    enabled: true
+    delete:
+      enabled: true
   auth:
     htpasswd:
       realm: basic-realm

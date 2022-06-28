@@ -1,19 +1,65 @@
 version: 0.1
-{{ registry.log | json }}
-{{ registry.storage | json }}
-{{ registry.delete | json }}
-{{ registry.http | json }}
+log:
+  level: {{ registry.log.level|default('info', true) }}
+  formatter: {{ registry.log.formatter|default('text', true) }}
+{%- if registry.log.fields is defined %}
+  fields:
+{%- if registry.log.fields.service is defined %}
+    service: {{ registry.log.fields.service }}
+{%- endif %}
+{%- if registry.log.fields.environment is defined %}
+    environment: {{ registry.log.fields.environment }}
+{%- endif %}
+{%- endif %}
+storage:
+  filesystem:
+    rootdirectory: {{ registry.storage.filesystem.rootdirectory }}
+{%- if registry.storage.filesystem.maxthreads is defined %}
+    maxthreads: {{ registry.storage.filesystem.maxthreads }}
+{%- endif %}
+{%- if registry.storage.delete.enabled is defined %}
+  delete:
+    enabled: {{ registry.storage.delete.enabled }}
+{%- endif %}
+  redirect:
+    disable: false
+{%- if registry.storage.cache.blobdescriptor is defined %}
+  cache:
+    blobdescriptor: {{ registry.storage.cache.blobdescriptor }}
+{%- endif %}
 {%- if registry.authentication %}
-{%- if registry.auth.htpasswd.htpasswdfile %}
-{% set htpasswd = registry.configdir + registry.auth.htpasswd.htpasswdfile %}
-  auth:
-    htpasswd:
-      realm: registry-realm
-      htpasswdfile: {{ htpasswd }}
-{%- else %}
-{{ registry.auth | json }}
+auth:
+{%- if registry.auth.htpasswd is defined %}
+  htpasswd:
+    realm: {{ registry.auth.htpasswd.realm|default('registry-realm', true) }}
+    path: {{ registry.configdir ~ registry.auth.htpasswd.htpasswdfile|default('htpasswd', true) }}
 {%- endif %}
 {%- endif %}
-{{ registry.health | json }}
-{{ registry.validation | json }}
-{{ registry.prometheus | json }}
+http:
+  addr: {{ registry.http.addr }}
+{%- if registry.http.prefix is defined %}
+  prefix: {{ registry.http.prefix }}
+{%- endif %}
+{%- if registry.http.relativeurls is defined %}
+  relativeurls: {{ registry.http.relativeurls }}
+{%- endif %}
+{%- if registry.http.draintimeout is defined %}
+  draintimeout: {{ registry.http.draintimeout }}
+{%- endif %}
+{%- if registry.http.tls is defined %}
+  tls:
+    certificate: {{ registry.http.tls.certificate }}
+    key: {{ registry.http.tls.key }}
+{%- if registry.http.tls.clientcas is defined %}
+    clientcas:
+{%- for ca in registry.http.tls.clientcas|default([], true) %}
+      - {{ ca }}
+{%- endfor %}
+{%- endif %}
+{%- if registry.http.headers is defined %}
+  headers:
+{%- for k, v in registry.http.headers.items() %}
+    {{ k }}: {{ v }}
+{%- endfor %}
+{%- endif %}
+{%- endif %}

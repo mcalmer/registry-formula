@@ -1,18 +1,20 @@
 # frozen_string_literal: true
 
-# Prepare platform "finger"
-platform_finger = system.platform[:finger].split('.').first.to_s
+# Prepare platform "family"
+platform_family = system.platform[:family]
 
 control 'registry.package.install' do
   title 'The required package should be installed'
 
   # Override by `platform_finger`
   package_name =
-    case platform_finger
-    when 'centos-6', 'amazonlinux-1'
-      'cronie'
-    else
-      'bash'
+    case platform_family
+    when 'redhat'
+      'docker-distribution'
+    when 'debian'
+      'docker-registry'
+    else # suse
+      'docker-distribution-registry'
     end
 
   describe package(package_name) do

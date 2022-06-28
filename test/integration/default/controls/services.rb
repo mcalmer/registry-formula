@@ -1,18 +1,20 @@
 # frozen_string_literal: true
 
-# Prepare platform "finger"
-platform_finger = system.platform[:finger].split('.').first.to_s
+# Prepare platform "family"
+platform_family = system.platform[:family]
 
 control 'registry.service.running' do
   title 'The service should be installed, enabled and running'
 
-  # Override by `platform_finger`
+  # Override by `platform_family`
   service_name =
-    case platform_finger
-    when 'centos-6', 'amazonlinux-1'
-      'crond'
-    else
-      'systemd-journald'
+    case platform_family
+    when 'redhat'
+      'docker-distribution'
+    when 'debian'
+      'docker-registry'
+    else # suse
+      'registry'
     end
 
   describe service(service_name) do

@@ -1,40 +1,33 @@
 # frozen_string_literal: true
 
+platform_family = system.platform[:family]
+
 control 'registry.config.file' do
   title 'Verify the configuration file'
 
-  describe file('/etc/template-formula.conf') do
+  # Override by `platform_finger`
+  configfile =
+    case platform_family
+    when 'suse'
+      '/etc/registry/config.yml'
+    when 'redhat'
+      '/etc/docker-distribution/registry/config.yml'
+    when 'debian'
+      '/etc/docker/registry/config.yml'
+    else
+      '/etc/docker-distribution/config.yml'
+    end
+
+  describe file(configfile) do
     it { should be_file }
     it { should be_owned_by 'root' }
     it { should be_grouped_into 'root' }
     its('mode') { should cmp '0644' }
-    its('content') do
-      should include(
-        'This is another example file from SaltStack template-formula.'
-      )
-    end
-    its('content') { should include '"added_in_pillar": "pillar_value"' }
-    its('content') { should include '"added_in_defaults": "defaults_value"' }
-    its('content') { should include '"added_in_lookup": "lookup_value"' }
-    its('content') { should include '"config": "/etc/template-formula.conf"' }
-    its('content') { should include '"lookup": {"added_in_lookup": "lookup_value",' }
-    its('content') { should include '"pkg": {"name": "' }
-    its('content') { should include '"service": {"name": "' }
-    its('content') do
-      # rubocop:disable Lint/RedundantCopDisableDirective
-      # rubocop:disable Layout/LineLength
-      should include(
-        '"tofs": {"files_switch": ["any/path/can/be/used/here", "id", '\
-        '"roles", "osfinger", "os", "os_family"], "source_files": '\
-        '{"registry-config-file-file-managed": ["example.tmpl.jinja"], '\
-        '"registry-subcomponent-config-file-file-managed": '\
-        '["subcomponent-example.tmpl.jinja"]}'
-      )
-      # rubocop:enable Layout/LineLength
-      # rubocop:enable Lint/RedundantCopDisableDirective
-    end
-    its('content') { should include '"arch": "amd64"' }
-    its('content') { should include '"winner": "pillar"}' }
-    its('content') { should include 'winner of the merge: pillar' }
+    # its('content_as_yaml') { should include('storage' => { 'filesystem' => {
+    #     'rootdirectory' => '/var/lib/docker-registry' } } ) }
+    # its('content_as_yaml') { should include('http' => { 'addr' => ':5000' } ) }
+    its('content') { should match(%r{\s+rootdirectory:\s/var/lib/docker-registry}) }
+    its('content') { should match(/\s+addr:\s:5000/) }
+    its('content') { should_not match(/\s*auth:/) }
   end
 end

@@ -107,6 +107,30 @@ suites:
           '*':
             - registry._mapdata
             - registry
+      pillars:
+        top.sls:
+          base:
+            '*':
+              - default
+      pillars_from_files:
+        registry.sls: test/salt/pillar/default.sls
     verifier:
       inspec_tests:
         - path: test/integration/default
+  - name: auth
+    provisioner:
+      state_top:
+        base:
+          '*':
+            - registry._mapdata
+            - registry
+      pillars:
+        top.sls:
+          base:
+            '*':
+              - auth
+      pillars_from_files:
+        registry.sls: test/salt/pillar/auth.sls
+    verifier:
+      inspec_tests:
+        - path: test/integration/auth

@@ -1,0 +1,50 @@
+# yamllint disable rule:indentation rule:line-length
+# Leap-15
+---
+values:
+  arch: amd64
+  auth:
+    htpasswd:
+      htpasswdfile: htpasswd
+      realm: basic-realm
+  authentication: true
+  configdir: "/etc/registry/"
+  configfile: config.yml
+  htpasswd:
+    users:
+      tux: penguin
+  http:
+    addr: :5000
+    headers:
+      X-Content-Type-Options:
+      - nosniff
+  log:
+    fields:
+      environment: production
+      service: registry
+    formatter: text
+    level: info
+  map_jinja:
+    sources:
+    - Y:G@osarch
+    - Y:G@os_family
+    - Y:G@os
+    - Y:G@oscodename
+    - Y:G@osfinger
+    - C@registry:lookup
+    - C@registry
+    - Y:G@id
+  pkgs:
+    - docker-distribution-registry
+    - apache2-utils
+  registryuser: registry
+  rootgroup: root
+  service:
+    name: registry
+  storage:
+    cache:
+      blobdescriptor: inmemory
+    delete:
+      enabled: true
+    filesystem:
+      rootdirectory: "/var/lib/docker-registry"

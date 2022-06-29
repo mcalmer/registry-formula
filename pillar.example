@@ -52,9 +52,6 @@ registry:
     tls:
       certificate: /path/to/x509/public
       key: /path/to/x509/private
-      clientcas:
-        - /path/to/ca.pem
-        - /path/to/another/ca.pem
       minimumtls: tls1.2
     headers:
       X-Content-Type-Options: [nosniff]
@@ -62,3 +59,20 @@ registry:
     users:
       tux: penguin
       you: yourpassword
+  certs:
+    servercrt:
+      -----BEGIN CERTIFICATE-----
+      MIIFHDCCBASgAwIBAgIUFC2O4cCAmICQm1ON2Q4rZ3e9newwDQYJKoZIhvcNAQEL
+      BQAwejELMAkGA1UEBhMCREUxDzANBgNVBAgMBkJheWVybjESMBAGA1UEBwwJTnVl
+      ...
+      aEHhTjT+52eRRpKexOubxTSEBS7L7vHAFjY+1/to41tj4p6Q6W1k7cEF8SKlwG6r
+      Wn/Ga8vYXiDDJrcAVCwKTA==
+      -----END CERTIFICATE-----
+    serverkey:
+      -----BEGIN RSA PRIVATE KEY-----
+      MIIEpQIBAAKCAQEAyLCdQjv9ycy47Yhh8l4zVKvbm+QpEF5MkadzTcwbicyrS2jw
+      CLlgWKKWx1sQsBYF7yp7hJF/WUMizwP++Z5u7oJyXmvA+EdNS3p+NhWqaeX/coMo
+      ...
+      +nfvZTjcFRHCY139lTJkvqN5IO3ttQLRB4vwEa4q/VXF0AxxliuDV/t8S6Z+ctgx
+      ruNjUAhFzo+cwtBW4NDuKVP2+8aYxfUM6dWOIDcl3ufNqVgZh6DfKUI=
+      -----END RSA PRIVATE KEY-----

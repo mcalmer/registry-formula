@@ -51,7 +51,9 @@ control 'registry.config.file' do
     its('content') { should match(%r{\s+rootdirectory:\s/var/lib/docker-registry}) }
     its('content') { should match(/\s+addr:\s:5000/) }
     its('content') { should match(/\s*auth:/) }
-    its('content') { should match(%r{\s+ path:\s/.+/htpasswd}) }
+    its('content') { should match(%r{\s+path:\s/.+/htpasswd}) }
+    its('content') { should match(%r{\s+certificate: /etc/pki/tls/certs/registry.crt}) }
+    its('content') { should match(%r{\s+key: /etc/pki/tls/private/registry.key}) }
   end
 
   describe file(htpasswdfile) do
@@ -60,5 +62,23 @@ control 'registry.config.file' do
     it { should be_grouped_into 'root' }
     its('mode') { should cmp '0600' }
     its('content') { should match(/^tux:.+/) }
+  end
+
+  describe file('/etc/pki/tls/certs/registry.crt') do
+    it { should be_file }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+    its('mode') { should cmp '0644' }
+    its('content') { should match(/^-----BEGIN CERTIFICATE-----$/) }
+    its('content') { should match(/^-----END CERTIFICATE-----$/) }
+  end
+
+  describe file('/etc/pki/tls/private/registry.key') do
+    it { should be_file }
+    it { should be_owned_by reguser }
+    it { should be_grouped_into 'root' }
+    its('mode') { should cmp '0600' }
+    its('content') { should match(/^-----BEGIN RSA PRIVATE KEY-----$/) }
+    its('content') { should match(/^-----END RSA PRIVATE KEY-----$/) }
   end
 end

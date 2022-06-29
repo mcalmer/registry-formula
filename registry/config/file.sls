@@ -27,6 +27,32 @@ registry-config-file-file-managed:
     - context:
         registry: {{ registry | json }}
 
+{%- if registry.http.tls is defined and registry.certs is defined %}
+
+registry-config-file-certificate:
+  file.managed:
+    - name: {{ registry.http.tls.certificate }}
+    - contents_pillar: registry:certs:servercrt
+    - mode: 644
+    - user: root
+    - group: {{ registry.rootgroup }}
+    - makedirs: True
+    - require:
+      - file: registry-config-file-file-managed
+
+registry-config-file-key:
+  file.managed:
+    - name: {{ registry.http.tls.key }}
+    - contents_pillar: registry:certs:serverkey
+    - mode: 600
+    - user: {{ registry.registryuser }}
+    - group: {{ registry.rootgroup }}
+    - makedirs: True
+    - dir_mode: 755
+    - require:
+      - file: registry-config-file-file-managed
+
+{%- endif %}
 {%- if registry.authentication and registry.htpasswd.users is defined and registry.auth.htpasswd is defined %}
 
 registry-config-file-htpasswd-permissions:

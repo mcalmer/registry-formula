@@ -11,6 +11,10 @@ include:
 
 registry-config-clean-file-absent:
   file.absent:
-    - name: {{ registry.config }}
+    - name: {{ registry.configdir + registry.configfile }}
     - require:
       - sls: {{ sls_service_clean }}
+
+registry-config-clean-htpasswd:
+  file.absent:
+    - name: {{ registry.configdir + registry.auth.htpasswd.htpasswdfile }}

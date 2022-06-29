@@ -31,8 +31,10 @@ values:
     - C@registry:lookup
     - C@registry
     - Y:G@id
-  pkg:
-    name: distribution-registry
+  pkgs:
+    - distribution-registry
+    - apache2-utils
+  registryuser: registry
   rootgroup: root
   service:
     name: registry

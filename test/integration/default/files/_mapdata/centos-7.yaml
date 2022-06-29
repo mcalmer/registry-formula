@@ -31,8 +31,10 @@ values:
     - C@registry:lookup
     - C@registry
     - Y:G@id
-  pkg:
-    name: docker-distribution
+  pkgs:
+    - docker-distribution
+    - httpd-tools
+  registryuser: root
   rootgroup: root
   service:
     name: docker-distribution

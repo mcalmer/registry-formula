@@ -26,3 +26,25 @@ registry-config-file-file-managed:
       - sls: {{ sls_package_install }}
     - context:
         registry: {{ registry | json }}
+
+{%- if registry.authentication and registry.htpasswd.users is defined and registry.auth.htpasswd is defined %}
+
+registry-config-file-htpasswd-permissions:
+  file.managed:
+    - name: {{ registry.configdir ~ registry.auth.htpasswd.htpasswdfile|default('htpasswd', true) }}
+    - user: {{ registry.registryuser }}
+    - group: {{ registry.rootgroup }}
+    - mode: 600
+
+{%- for user, passwd in registry.htpasswd.users.items() %}
+registry-config-file-htpasswd-{{ user }}:
+  webutil.user_exists:
+    - name: {{ user }}
+    - password: {{ passwd }}
+    - htpasswd_file: {{ registry.configdir ~ registry.auth.htpasswd.htpasswdfile|default('htpasswd', true) }}
+    - options: 'B'
+    - require:
+      - file: registry-config-file-htpasswd-permissions
+
+{%- endfor %}
+{%- endif %}

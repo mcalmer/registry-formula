@@ -11,6 +11,9 @@ include:
 
 registry-package-clean-pkg-removed:
   pkg.removed:
-    - name: {{ registry.pkg.name }}
+    - pkgs:
+{%- for pkg in registry.pkgs %}
+      - {{ pkg }}
+{%- endfor %}
     - require:
       - sls: {{ sls_config_clean }}

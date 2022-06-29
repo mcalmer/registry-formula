@@ -12,9 +12,11 @@
 # values: {}
 ---
 values:
-  pkg:
-    name: docker-registry
+  pkgs:
+    - docker-registry
+    - apache2-utils
   configdir: '/etc/docker/registry/'
+  registryuser: docker-registry
   service:
     name: docker-registry
 ...

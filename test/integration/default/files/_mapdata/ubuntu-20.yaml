@@ -31,8 +31,10 @@ values:
     - C@registry:lookup
     - C@registry
     - Y:G@id
-  pkg:
-    name: docker-registry
+  pkgs:
+    - docker-registry
+    - apache2-utils
+  registryuser: docker-registry
   rootgroup: root
   service:
     name: docker-registry

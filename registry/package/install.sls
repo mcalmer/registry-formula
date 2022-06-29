@@ -7,4 +7,7 @@
 
 registry-package-install-pkg-installed:
   pkg.installed:
-    - name: {{ registry.pkg.name }}
+    - pkgs:
+{%- for pkg in registry.pkgs %}
+      - {{ pkg }}
+{%- endfor %}

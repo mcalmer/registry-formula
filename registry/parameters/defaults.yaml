@@ -4,9 +4,11 @@
 # Set default values.
 ---
 values:
-  pkg:
-    name: docker-distribution-registry
+  pkgs:
+    - docker-distribution-registry
+    - apache2-utils
   rootgroup: root
+  registryuser: registry
   configdir: '/etc/registry/'
   configfile: 'config.yml'
   storage:

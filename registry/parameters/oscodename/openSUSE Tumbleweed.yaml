@@ -12,6 +12,7 @@
 # values: {}
 ---
 values:
-  pkg:
-    name: distribution-registry
+  pkgs:
+    - distribution-registry
+    - apache2-utils
 ...

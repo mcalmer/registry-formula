@@ -12,9 +12,11 @@
 # values: {}
 ---
 values:
-  pkg:
-    name: docker-distribution
+  pkgs:
+    - docker-distribution
+    - httpd-tools
   configdir: '/etc/docker-distribution/registry/'
+  registryuser: root
   storage:
     filesystem:
       rootdirectory: '/var/lib/registry'

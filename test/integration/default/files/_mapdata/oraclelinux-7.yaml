@@ -1,44 +1,45 @@
 # yamllint disable rule:indentation rule:line-length
-# Oracle Linux Server-7
+# Leap-15
 ---
 values:
-  added_in_defaults: defaults_value
-  added_in_lookup: lookup_value
-  added_in_pillar: pillar_value
   arch: amd64
-  config: /etc/template-formula.conf
-  lookup:
-    added_in_lookup: lookup_value
-    master: template-master
-    winner: lookup
+  auth:
+    htpasswd:
+      htpasswdfile: htpasswd
+      realm: basic-realm
+  authentication: false
+  configdir: "/etc/docker-distribution/registry/"
+  configfile: config.yml
+  http:
+    addr: :5000
+    headers:
+      X-Content-Type-Options:
+      - nosniff
+  log:
+    fields:
+      environment: production
+      service: registry
+    formatter: text
+    level: info
   map_jinja:
     sources:
     - Y:G@osarch
     - Y:G@os_family
     - Y:G@os
+    - Y:G@oscodename
     - Y:G@osfinger
     - C@registry:lookup
     - C@registry
     - Y:G@id
-  master: template-master
   pkg:
-    name: bash
+    name: docker-distribution
   rootgroup: root
   service:
-    name: systemd-journald
-  subcomponent:
-    config: /etc/registry-subcomponent-formula.conf
-  tofs:
-    files_switch:
-    - any/path/can/be/used/here
-    - id
-    - roles
-    - osfinger
-    - os
-    - os_family
-    source_files:
-      registry-config-file-file-managed:
-      - example.tmpl.jinja
-      registry-subcomponent-config-file-file-managed:
-      - subcomponent-example.tmpl.jinja
-  winner: pillar
+    name: docker-distribution
+  storage:
+    cache:
+      blobdescriptor: inmemory
+    delete:
+      enabled: true
+    filesystem:
+      rootdirectory: "/var/lib/docker-registry"

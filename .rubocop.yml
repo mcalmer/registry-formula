@@ -19,5 +19,8 @@ Security/YAMLLoad:
 # General settings across all cops in this formula
 AllCops:
   NewCops: enable
+  Exclude:
+    - 'registry-formula.spec'
+    - 'vendor/**/*'
 
 # Any offenses that should be fixed, e.g. collected via. `rubocop --auto-gen-config`

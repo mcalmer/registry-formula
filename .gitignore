@@ -24,12 +24,14 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+registry-formula-*.tar.gz
 
 # PyInstaller
 #  Usually these files are written by a python script from a packager
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
+!registry-formula.spec
 
 # Installer logs
 pip-log.txt

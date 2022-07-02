@@ -1,0 +1,126 @@
+---
+registry:
+  $type: namespace
+
+  log:
+    $type: group
+    $name: Logging
+    $help: >
+      Logging Configuration
+
+    level:
+      $name: Loglevel
+      $default: info
+      $help: >
+        Sets the sensitivity of logging output. Permitted values are
+        "error", "warn", "info" and "debug". The default is "info".
+
+    formatter:
+      $name: Formatter
+      $default: text
+      $help: >
+        This selects the format of logging output. The format primarily
+        affects how keyed attributes for a log line are encoded. Options
+        are "text", "json" or "logstash". The default is text.
+
+  storage:
+    $type: group
+    $name: Storage
+    $help: >
+      The storage option is required and defines which storage backend is in
+      use.
+
+    filesystem:
+      $type: group
+      $name: Filesystem Storage backend
+
+      rootdirectory:
+        $name: Directory
+        $help: >
+          The parameter specifies the absolute path to a directory. The
+          registry stores all its data here so make sure there is adequate
+          space available.
+
+    cache:
+      $type: group
+      $name: Caching for Storage Backend
+
+      enabled:
+        $type: boolean
+        $name: enabled
+
+      blobdescriptor:
+        $name: Cachetype
+        $disabled: "!formValues.registry.storage.cache.enabled"
+
+    delete:
+      $name: enabled
+      $type: boolean
+      $default: false
+
+
+  auth:
+    $type: group
+    $name: Authentication
+
+    enabled:
+      $type: boolean
+      $name: enabled
+
+    htpasswd:
+      $type: group
+      $name: Authentication backend
+
+      realm:
+        $name: realm
+        $default: registry-realm
+        $disabled: "!formValues.registry.auth.enabled"
+        $required: true
+
+      users:
+        $type: edit-group
+        $minItems: 1
+        $itemName: User ${i}
+        $disabled: "!formValues.registry.auth.enabled"
+        $prototype:
+          $type: group
+          $key:
+            $type: text
+            $name: Username
+          password:
+            $type: password
+            $name: Password
+
+  http:
+    $type: group
+    $name: HTTP Configuration
+
+    addr:
+      $name: Listen Address and Port Configuration
+      $default: :5000
+
+    tls:
+      $type: group
+      $name: TLS Configuration
+
+      enabled:
+        $type: boolean
+        $name: enabled
+
+      certificate:
+        $name: Server Certificate
+        $disabled: "!formValues.registry.http.tls.enabled"
+        $required: true
+
+      key:
+        $name: Server Private Key
+        $disabled: "!formValues.registry.http.tls.enabled"
+        $required: true
+
+      minimumtls:
+        $name: Minimum allowed TLS version
+        $default: tls1.2
+        $help: "Possible values: tls1.0, tls1.1, tls1.2, tls1.3"
+        $disabled: "!formValues.registry.http.tls.enabled"
+
+...

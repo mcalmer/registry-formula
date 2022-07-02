@@ -18,6 +18,18 @@ control 'registry.config.file' do
       '/etc/docker-distribution/config.yml'
     end
 
+  configdir =
+    case platform_family
+    when 'suse'
+      '/etc/registry/'
+    when 'redhat', 'fedora'
+      '/etc/docker-distribution/registry/'
+    when 'debian'
+      '/etc/docker/registry/'
+    else
+      '/etc/docker-distribution/'
+    end
+
   htpasswdfile =
     case platform_family
     when 'suse'
@@ -51,9 +63,9 @@ control 'registry.config.file' do
     its('content') { should match(%r{\s+rootdirectory:\s/var/lib/docker-registry}) }
     its('content') { should match(/\s+addr:\s:5000/) }
     its('content') { should match(/\s*auth:/) }
-    its('content') { should match(%r{\s+path:\s/.+/htpasswd}) }
-    its('content') { should match(%r{\s+certificate: /etc/pki/tls/certs/registry.crt}) }
-    its('content') { should match(%r{\s+key: /etc/pki/tls/private/registry.key}) }
+    its('content') { should match(/\s+path: #{configdir}htpasswd/) }
+    its('content') { should match(/\s+certificate: #{configdir}registry.crt/) }
+    its('content') { should match(/\s+key: #{configdir}registry.key/) }
   end
 
   describe file(htpasswdfile) do
@@ -64,7 +76,7 @@ control 'registry.config.file' do
     its('content') { should match(/^tux:.+/) }
   end
 
-  describe file('/etc/pki/tls/certs/registry.crt') do
+  describe file("#{configdir}registry.crt") do
     it { should be_file }
     it { should be_owned_by 'root' }
     it { should be_grouped_into 'root' }
@@ -73,7 +85,7 @@ control 'registry.config.file' do
     its('content') { should match(/^-----END CERTIFICATE-----$/) }
   end
 
-  describe file('/etc/pki/tls/private/registry.key') do
+  describe file("#{configdir}registry.key") do
     it { should be_file }
     it { should be_owned_by reguser }
     it { should be_grouped_into 'root' }

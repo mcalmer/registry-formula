@@ -10,6 +10,7 @@ registry:
       environment: production
   storage:
     cache:
+      enabled: false
       blobdescriptor: inmemory
     filesystem:
       rootdirectory: /var/lib/docker-registry
@@ -18,8 +19,12 @@ registry:
   auth:
     htpasswd:
       realm: basic-realm
-      htpasswdfile: htpasswd
+      users:
+        tux:
+          password: penguin
   http:
     addr: :5000
+    tls:
+      enabled: false
     headers:
       X-Content-Type-Options: [nosniff]

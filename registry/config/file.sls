@@ -27,12 +27,12 @@ registry-config-file-file-managed:
     - context:
         registry: {{ registry | json }}
 
-{%- if registry.http.tls is defined and registry.certs is defined %}
+{%- if registry.http.tls.enabled is defined and registry.http.tls.enabled %}
 
 registry-config-file-certificate:
   file.managed:
-    - name: {{ registry.http.tls.certificate }}
-    - contents_pillar: registry:certs:servercrt
+    - name: {{ registry.configdir + 'registry.crt' }}
+    - contents_pillar: registry:http:tls:certificate
     - mode: 644
     - user: root
     - group: {{ registry.rootgroup }}
@@ -42,8 +42,8 @@ registry-config-file-certificate:
 
 registry-config-file-key:
   file.managed:
-    - name: {{ registry.http.tls.key }}
-    - contents_pillar: registry:certs:serverkey
+    - name: {{ registry.configdir + 'registry.key' }}
+    - contents_pillar: registry:http:tls:key
     - mode: 600
     - user: {{ registry.registryuser }}
     - group: {{ registry.rootgroup }}
@@ -53,22 +53,25 @@ registry-config-file-key:
       - file: registry-config-file-file-managed
 
 {%- endif %}
-{%- if registry.authentication and registry.htpasswd.users is defined and registry.auth.htpasswd is defined %}
+{%- if registry.auth.enabled is defined and registry.auth.enabled %}
 
 registry-config-file-htpasswd-permissions:
   file.managed:
-    - name: {{ registry.configdir ~ registry.auth.htpasswd.htpasswdfile|default('htpasswd', true) }}
+    - name: {{ registry.configdir ~ 'htpasswd' }}
+    - replace: False
     - user: {{ registry.registryuser }}
     - group: {{ registry.rootgroup }}
     - mode: 600
 
-{%- for user, passwd in registry.htpasswd.users.items() %}
+{%- for user in registry.auth.htpasswd.users %}
 registry-config-file-htpasswd-{{ user }}:
   webutil.user_exists:
     - name: {{ user }}
-    - password: {{ passwd }}
-    - htpasswd_file: {{ registry.configdir ~ registry.auth.htpasswd.htpasswdfile|default('htpasswd', true) }}
+    - password: {{ registry.auth.htpasswd.users.get(user, {}).get('password', None) }}
+    - htpasswd_file: {{ registry.configdir ~ 'htpasswd' }}
     - options: 'B'
+    - update: True
+    - runas: {{ registry.registryuser }}
     - require:
       - file: registry-config-file-htpasswd-permissions
 

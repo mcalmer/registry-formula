@@ -23,16 +23,16 @@ storage:
 {%- endif %}
   redirect:
     disable: false
-{%- if registry.storage.cache.blobdescriptor is defined %}
+{%- if registry.storage.cache.enabled is defined and registry.storage.cache.enabled %}
   cache:
     blobdescriptor: {{ registry.storage.cache.blobdescriptor }}
 {%- endif %}
-{%- if registry.authentication %}
+{%- if registry.auth.enabled is defined and registry.auth.enabled %}
 auth:
 {%- if registry.auth.htpasswd is defined %}
   htpasswd:
     realm: {{ registry.auth.htpasswd.realm|default('registry-realm', true) }}
-    path: {{ registry.configdir ~ registry.auth.htpasswd.htpasswdfile|default('htpasswd', true) }}
+    path: {{ registry.configdir ~ 'htpasswd' }}
 {%- endif %}
 {%- endif %}
 http:
@@ -46,10 +46,10 @@ http:
 {%- if registry.http.draintimeout is defined %}
   draintimeout: {{ registry.http.draintimeout }}
 {%- endif %}
-{%- if registry.http.tls is defined %}
+{%- if registry.http.tls.enabled is defined and registry.http.tls.enabled %}
   tls:
-    certificate: {{ registry.http.tls.certificate }}
-    key: {{ registry.http.tls.key }}
+    certificate: {{ registry.configdir ~ 'registry.crt' }}
+    key: {{ registry.configdir ~ 'registry.key' }}
 {%- if registry.http.tls.clientcas is defined %}
     clientcas:
 {%- for ca in registry.http.tls.clientcas|default([], true) %}

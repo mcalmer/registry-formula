@@ -10,6 +10,8 @@ registry:
 
     level:
       $name: Loglevel
+      $type: select
+      $values: ["error", "warn", "info", "debug"]
       $default: info
       $help: >
         Sets the sensitivity of logging output. Permitted values are
@@ -17,11 +19,13 @@ registry:
 
     formatter:
       $name: Formatter
+      $type: select
+      $values: ["text", "json", "logstash"]
       $default: text
       $help: >
         This selects the format of logging output. The format primarily
         affects how keyed attributes for a log line are encoded. Options
-        are "text", "json" or "logstash". The default is text.
+        are "text", "json" or "logstash". The default is "text".
 
   storage:
     $type: group
@@ -36,6 +40,7 @@ registry:
 
       rootdirectory:
         $name: Directory
+        $required: true
         $help: >
           The parameter specifies the absolute path to a directory. The
           registry stores all its data here so make sure there is adequate
@@ -47,17 +52,22 @@ registry:
 
       enabled:
         $type: boolean
-        $name: enabled
+        $name: Enabled
 
       blobdescriptor:
         $name: Cachetype
-        $disabled: "!formValues.registry.storage.cache.enabled"
+        $placeholder: "inmemory"
+        $required: true
+        $visible: "formValues.registry.storage.cache.enabled"
 
     delete:
-      $name: enabled
-      $type: boolean
-      $default: false
+      $type: group
+      $name: Delete Images
 
+      enabled:
+        $type: boolean
+        $name: Enabled
+        $default: false
 
   auth:
     $type: group
@@ -65,23 +75,23 @@ registry:
 
     enabled:
       $type: boolean
-      $name: enabled
+      $name: Enabled
 
     htpasswd:
       $type: group
       $name: Authentication backend
+      $visible: "formValues.registry.auth.enabled"
 
       realm:
-        $name: realm
+        $name: Basic Auth Realm
         $default: registry-realm
-        $disabled: "!formValues.registry.auth.enabled"
         $required: true
 
       users:
         $type: edit-group
         $minItems: 1
+        $required: true
         $itemName: User ${i}
-        $disabled: "!formValues.registry.auth.enabled"
         $prototype:
           $type: group
           $key:
@@ -105,22 +115,26 @@ registry:
 
       enabled:
         $type: boolean
-        $name: enabled
+        $name: Enabled
 
       certificate:
         $name: Server Certificate
-        $disabled: "!formValues.registry.http.tls.enabled"
+        $type: textarea
         $required: true
+        $rows: 10
+        $visible: "formValues.registry.http.tls.enabled"
 
       key:
         $name: Server Private Key
-        $disabled: "!formValues.registry.http.tls.enabled"
+        $type: textarea
         $required: true
+        $rows: 10
+        $visible: "formValues.registry.http.tls.enabled"
 
       minimumtls:
         $name: Minimum allowed TLS version
+        $type: select
+        $values: ["tls1.0", "tls1.1", "tls1.2", "tls1.3"]
         $default: tls1.2
-        $help: "Possible values: tls1.0, tls1.1, tls1.2, tls1.3"
-        $disabled: "!formValues.registry.http.tls.enabled"
-
+        $visible: "formValues.registry.http.tls.enabled"
 ...

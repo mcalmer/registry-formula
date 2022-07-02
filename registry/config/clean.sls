@@ -17,4 +17,12 @@ registry-config-clean-file-absent:
 
 registry-config-clean-htpasswd:
   file.absent:
-    - name: {{ registry.configdir + registry.auth.htpasswd.htpasswdfile }}
+    - name: {{ registry.configdir + 'htpasswd' }}
+
+registry-conifg-clean-registry-cert:
+  file.absent:
+    - name: {{ registry.configdir + 'registry.crt' }}
+
+registry-conifg-clean-registry-key:
+  file.absent:
+    - name: {{ registry.configdir + 'registry.key' }}

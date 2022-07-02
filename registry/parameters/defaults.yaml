@@ -14,7 +14,6 @@ values:
   storage:
     filesystem:
       rootdirectory: '/var/lib/docker-registry'
-  authentication: false
   http:
     addr: :5000
   service:

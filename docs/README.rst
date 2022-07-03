@@ -129,28 +129,6 @@ dependency on ``registry.service.clean`` via include list.
 This state will remove the registry package and has a depency on
 ``registry.config.clean`` via include list.
 
-``registry.subcomponent``
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-*Meta-state (This is a state that includes other states)*.
-
-This state installs a subcomponent configuration file before
-configuring and starting the registry service.
-
-``registry.subcomponent.config``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This state will configure the registry subcomponent and has a
-dependency on ``registry.config`` via include list.
-
-``registry.subcomponent.config.clean``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This state will remove the configuration of the registry subcomponent
-and reload the registry service by a dependency on
-``registry.service.running`` via include list and ``watch_in``
-requisite.
-
 Testing
 -------
 

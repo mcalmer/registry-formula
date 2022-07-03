@@ -1,3 +1,5 @@
+{#- ensure configdir ends with a '/' #}
+{%- set configdir = registry.configdir | regex_replace('^(.+)([^/]+)/*$', '\\1\\2/') %}
 version: 0.1
 log:
   level: {{ registry.log.level|default('info', true) }}
@@ -32,7 +34,7 @@ auth:
 {%- if registry.auth.htpasswd is defined %}
   htpasswd:
     realm: {{ registry.auth.htpasswd.realm|default('registry-realm', true) }}
-    path: {{ registry.configdir ~ 'htpasswd' }}
+    path: {{ configdir ~ 'htpasswd' }}
 {%- endif %}
 {%- endif %}
 http:
@@ -48,8 +50,8 @@ http:
 {%- endif %}
 {%- if registry.http.tls.enabled is defined and registry.http.tls.enabled %}
   tls:
-    certificate: {{ registry.configdir ~ 'registry.crt' }}
-    key: {{ registry.configdir ~ 'registry.key' }}
+    certificate: {{ configdir ~ 'registry.crt' }}
+    key: {{ configdir ~ 'registry.key' }}
 {%- if registry.http.tls.clientcas is defined %}
     clientcas:
 {%- for ca in registry.http.tls.clientcas|default([], true) %}

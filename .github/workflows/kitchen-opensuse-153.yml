@@ -28,4 +28,4 @@ jobs:
         run: bundle install
 
       - name: Kitchen
-        run: bin/kitchen list
+        run: bin/kitchen test default-opensuse-leap-153-master-py3

@@ -27,5 +27,8 @@ jobs:
       - name: Install kitchen
         run: bundle install
 
-      - name: Kitchen
+      - name: Kitchen default
         run: bin/kitchen test default-opensuse-leap-153-master-py3
+
+      - name: Kitchen auth
+        run: bin/kitchen test auth-opensuse-leap-153-master-py3

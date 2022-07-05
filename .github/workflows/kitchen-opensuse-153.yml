@@ -1,0 +1,23 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+---
+name: kitchen-opensuse-153
+'on':
+  pull_request: ~
+  push:
+    branches:
+      - master
+
+jobs:
+  kitchen:
+    runs-on: ubuntu-latest
+    container: saltimages/salt-master-py3:opensuse-leap-15.3
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Kitchen
+        run: bin/kitchen list

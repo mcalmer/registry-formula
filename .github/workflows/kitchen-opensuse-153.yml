@@ -11,7 +11,6 @@ name: kitchen-opensuse-153
 jobs:
   kitchen:
     runs-on: ubuntu-latest
-    container: saltimages/salt-master-py3:opensuse-leap-15.3
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:

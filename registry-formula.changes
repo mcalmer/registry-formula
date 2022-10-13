@@ -1,4 +1,5 @@
 -------------------------------------------------------------------
 Thu Jun 30 07:56:29 UTC 2022 - Michael Calmer <mc@suse.com>
 
+- Salt formula used to setup and configure a container registry
 - Initial version 0.9.0

@@ -26,6 +26,8 @@ Summary:        Container Registry Formula
 License:        Apache-2.0
 URL:            https://github.com/mcalmer/registry-formula/
 Source:         %{name}-%{version}.tar.gz
+BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildArch:      noarch
 
 %description
 Formula used to setup and configure a container registry

@@ -7,6 +7,7 @@
 
 registry-package-install-pkg-installed:
   pkg.installed:
+    - resolve_capabilities: True
     - pkgs:
 {%- for pkg in registry.pkgs %}
       - {{ pkg }}
